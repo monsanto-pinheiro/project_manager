@@ -1,0 +1,178 @@
+{% extends '_layouts/base.html' %}
+
+{% load bootstrap4 %}
+{% load querystring from django_tables2 %}
+{% load trans blocktrans from i18n %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block css %}
+{% endblock css %}
+
+{% block breadcrumbs %}
+	{{ block.super }}
+	{% breadcrumb "Projects" "projects" %}
+	{% breadcrumb "List of events" "project-events" %}
+{% endblock %}
+
+<!-- set the messages -->
+{% block messages %}  
+	<div id="id_messages_remove"></div>
+{% endblock messages %}
+
+{% block content %}
+	
+	<legend id="id_header_legend">List all events</legend>
+	
+	<div class="container-fluid text-size-info">
+		<hr>
+		<div class="row">
+			<div class="col-lg-4" data-toggle="tooltip" title="{{project.project_type.description}}" data-placement="left">
+				<strong>Reference:</strong> {{ project.reference}}</div>
+		  	<div class="col-lg-4"><strong>Research:</strong> {{ project.research.name}}</div>
+		  	<div class="col-lg-4" data-toggle="tooltip" title="{{project.institute.name}}" data-placement="left">
+		  		<strong>Institute:</strong> {{ project.institute.abbreviation}}</div>
+		  	
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-lg-4"><strong>Created:</strong> {{ project.creation_date|date}}</div>
+			<div class="col-lg-4"><strong>CreatedBy:</strong> {{ project.owner.username}}</div> 
+		  	<div class="col-lg-4"><strong>Specie:</strong> {{ project.specie.name}}</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-lg-4" data-toggle="tooltip" title="{{project.project_type.description}}" data-placement="left">
+				<strong>Proj.Type:</strong> {{ project.project_type.abbreviation}}</div>
+		  	<div class="col-lg-4"><strong>Start date:</strong> {{ project.start_date}}</div>
+		  	<div class="col-lg-4"><strong>End date:</strong> {{ project.end_date}}</div>
+		</div>
+		<hr>
+		<div class="row">
+		  	<div class="col-lg-4" data-toggle="tooltip" title="Distinct people that worked in event" data-placement="left">
+		  		<strong>#Unique People:</strong> {{ project.number_people_allocated}}</div>
+		  	<div class="col-lg-4" data-toggle="tooltip" title="Number of hours used" data-placement="left">
+		  		<strong>#People Hours:</strong> {{ project.number_hours}}</div>
+		  	<div class="col-lg-4" data-toggle="tooltip" title="Working hours equipment" data-placement="left">
+		  			<strong>#Equip. Hours:</strong> {{ project.number_hours_of_equiments}}</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-lg-12"><strong>Description:</strong> {{ project.description|linebreaks}}</div>
+		</div>
+		<hr>
+	</div>
+		
+	{% if table.page and show_paginatior %}
+	  <div class="table-container">
+	{% endif %}
+	
+	{% block table %}
+	    <div class="table-responsive">
+	        <table class="table table-hover table-bordered table-striped"{% if table.attrs %} {{ table.attrs.as_html }}{% endif %}>
+	            {% block table.thead %}
+	            <thead>                 
+	                <tr>
+	                    <th colspan="8">
+	                    	<a href="{% if not is_super_user or not is_active %}javascript:;{% else %}{% url "event-add" %}{% endif %}" data-title="Create a new event"
+								class="btn btn-small {% if not is_super_user or not is_active %}btn-secondary{% else %}btn-primary{% endif %} dark">
+								<span><i class="fa fa-plus-square"></i> Add event</span></a>
+	                        <form method="get" class="form-inline form-search pull-right">
+	           		            {% csrf_token %}
+	                            <input id="search_form_id" name="search_projects" type="text" class="form-control col-md-8" placeholder="Event type, Created by"{% if search_events %} value="{{ search_events }}"{% endif %}>
+	                            <button type="submit" class="btn btn-small btn-dark"><i class="fa fa-search"></i> Search</button>
+	                        </form>
+	                    </th>                  
+	                </tr>
+	             
+	              <tr>
+	                {% for column in table.columns %}
+	                    {% if column.orderable %}
+	                    	<th {{ column.attrs.th.as_html }}><a href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}">{{ column.header|title }}</a></th>
+	                    {% else %}
+	                    	<th {{ column.attrs.th.as_html }}>{{ column.header|title }}</th>
+	                    {% endif %}
+	                {% endfor %}
+	              </tr>
+	            </thead>
+	            {% endblock table.thead %}
+	            {% block table.tbody %}
+	            <tbody>
+	                {% for row in table.page.object_list|default:table.rows %} {# support pagination #}
+	                  {% block table.tbody.row %}
+	                  <tr id="row_{{ row.record.id }}" class="{% cycle "odd" "even" %}">
+	                      {% for column, cell in row.items %}
+	                          <td {{ column.attrs.td.as_html }}>{{ cell }}</td>
+	                      {% endfor %}
+	                  </tr>
+	                  {% endblock table.tbody.row %}
+	                {% empty %}
+	                  {% if table.empty_text %}
+	                  {% block table.tbody.empty_text %}
+	                  	<tr><td colspan="{{ table.columns|length }}">{{ table.empty_text }}</td></tr>
+	                  {% endblock table.tbody.empty_text %}
+	                  {% endif %}
+	                {% endfor %}
+	            </tbody>
+	            {% endblock table.tbody %}
+	            {% block table.tfoot %}
+	            	<tfoot></tfoot>
+	            {% endblock table.tfoot %}
+	        </table>
+	    </div>
+	{% endblock table %}
+	
+	{% if table.page and show_paginatior %}
+	    {% block pagination %}
+	        {% bootstrap_pagination table.page url=request.get_full_path %}
+	    {% endblock pagination %}
+	  </div>
+	{% endif %}
+
+	<br>
+	<a href="{% url 'projects' %}" class="btn btn-small btn-primary dark">
+		<span><i class="fa fa-arrow-left"></i> Go back</span></a>
+	<br>
+
+	<!-- The remove Modal -->
+	<div class="modal fade" id="id_remove_event_modal" >
+		<div class="modal-dialog">
+			<div class="modal-content">
+   
+  					<!-- Modal Header -->
+  					<div class="modal-header">
+    					<h4 class="modal-title-remove">Remove an event</h4>
+    					<button type="button" class="close" data-dismiss="modal">&times;</button>
+  					</div>
+  
+  					<!-- Modal body -->
+  					<div class="modal-body mx-auto mw-100">
+  						<div id="id-modal-body-remove-event" remove-single-value-url="{% url 'remove-event-project' %}">
+  							<label id="id-label-remove" class="col-form-label">Folder Name</label>
+   						</div>
+  					</div>
+  					<!-- Modal footer -->
+  					<div class="modal-footer" id="id-modal-footer-remove">
+    					<button type="button" class="btn btn-secondary" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    					<button id="id-remove-button" type="button" class="btn btn-primary btn-danger" data-dismiss="modal">Remove</button>
+  					</div>
+			</div>
+ 		</div>
+	</div>
+{% endblock content %}
+
+
+{% block js %}
+	{% load static %}
+		<script type="text/javascript"> 
+			$().ready(function(){
+				document.getElementById("id_header_legend").textContent = "{{header_legend}}";
+			});
+		</script>
+		
+		<script type="text/javascript" src="{% static 'js/events/remove-events.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/events/list-events.js' %}"></script>
+		
+		
+
+{% endblock js %}
+

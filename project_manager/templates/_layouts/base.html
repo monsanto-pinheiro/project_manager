@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="iBiMED-DCM - Departamento de Ciências Médicas">
+  <meta name="author" content="Miguel Pinheiro">
+  <title>iBiMED-DCM - Departamento de Ciências Médicas</title>
+  <!-- Bootstrap core CSS-->
+
+	  {% load static %}
+	  	<link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+	  	<!-- Custom fonts for this template-->
+	  	<link rel="stylesheet" href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+	  	<!-- Custom styles for this template-->
+		<link rel="stylesheet" href="{% static 'css/sb-admin.min.css' %}" rel="stylesheet" type="text/css">
+		<!-- pre-define in-house css -->
+		<link rel="stylesheet" href="{% static 'css/project-manager-site.css' %}" rel="stylesheet" type="text/css"> 
+		
+		<!-- favicons-->
+		<link rel="icon" href="{% static 'icons/favicon-32x32.png' %}" sizes="32x32">
+
+  {% block css %}  
+  {% endblock css %}
+</head>
+
+<body id="page-top">
+
+	<header>
+		<!-- navbar -->
+		<nav class="navbar navbar-expand-md navbar-light p-0 justify-content-end justify-content-md-center">
+		
+			<button class="navbar-toggler custom-toggler p-3" type="button" data-toggle="modal" data-target="#navbar-modal">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		
+			<ul class="d-none d-md-flex navbar-nav mx-auto text-size-buttons">
+				<a class="nav-item nav-link {% if nav_dashboard %} active {% endif %} ml-4 ml-lg-5" href="{% url 'home' %}">About</a>
+				<a class="nav-item nav-link {% if nav_projets %} active {% endif %} ml-4 ml-lg-5" href="{% url 'projects' %}">Projects</a>
+				<a class="nav-item nav-link {% if nav_pipelines %} active {% endif %} ml-4 ml-lg-5" href="{% url 'pipelines' %}">Pipelines</a>
+				<a class="nav-item nav-link {% if nav_settings %} active {% endif %} ml-4 ml-lg-5" href="{% url 'settings-research' %}">Settings</a>
+				{% if user.is_authenticated %}
+					<a class="nav-item nav-link ml-4 ml-lg-5 {% if nav_login %} active {% endif %}" data-toggle="modal" id="id_user_name" data-target="#logoutModal">
+						<i class="fa fa-fw fa-sign-out"></i> {{ user.username }} - Logout</a>
+				{% else %}
+					<a class="nav-item nav-link ml-4 ml-lg-5 {% if nav_login %} active {% endif %}" href="{% url 'login' %}">
+            			<i class="fa fa-fw fa-sign-in"></i>Login</a>
+				{% endif %}
+			</ul>
+		</nav>
+		<!-- end navbar -->
+	</header>
+
+
+	<!-- Alerts and breadcrumbs  -->
+	<div class="container">
+		<!--  show short modal windows -->
+		{% if not not_show_breadcrumbs %}
+			{% load django_bootstrap_breadcrumbs %}
+			{% block breadcrumbs %}
+				<p> </p>
+				{% clear_breadcrumbs %}
+    			{% breadcrumb "Home" "/" %} 
+			{% endblock breadcrumbs %}
+			{% render_breadcrumbs %}
+		{% endif %} 
+		
+		<!-- MESSAGES -->
+	    {% if messages %}
+			{% for message in messages %}
+				<div class="alert alert-dismissible {% if message.tags == 'error' %} alert-danger {% else %} alert-{{ message.tags }} {% endif %}">
+					{{ message }}
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				</div>
+			{% endfor %}
+		{% endif %}
+		
+		<!-- other messages -->
+		{% block messages %}{% endblock messages %}
+ 		
+ 		<!-- header -->
+		{% block header %}{% endblock header %}
+		
+		<!-- content -->
+		{% block content %}{% endblock content %}
+		
+		<br>
+	</div>
+
+
+	<!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+		<i class="fa fa-angle-up"></i>
+    </a>
+    
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
+				</div>
+			</div>
+		</div>
+	</div>
+    
+   
+	    <!-- Bootstrap core JavaScript-->
+	    {% load static %}
+	        <script type="text/javascript" src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+	        <script type="text/javascript" src="{% static 'vendor/popper/popper.min.js' %}"></script>  <!-- https://popper.js.org/ -->
+	        <script type="text/javascript" src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+	    	<!-- Custom scripts for all pages-->
+	    	<script type="text/javascript" src="{% static 'js/sb-admin.min.js' %}"></script>
+	    	<script type="text/javascript" src="{% static 'js/project-manager-site.js' %}"></script>
+
+	{% block js %}
+    {% endblock js %}
+
+
+</body>
+
+</html>

@@ -1,0 +1,145 @@
+{% extends '_layouts/base.html' %}
+
+{% load bootstrap4 %}
+{% load crispy_forms_tags %}
+{% load django_bootstrap_breadcrumbs %}
+{% load querystring from django_tables2 %}
+
+{% block css %}
+	{% load static %}
+		<link rel="stylesheet" href="{% static 'css/error_add_html.css' %}" type="text/css" />
+		<link rel="stylesheet" href="{% static 'css/event-add.css' %}" type="text/css" />
+{% endblock css %}
+
+<!-- Breadcrumbs-->
+{% block breadcrumbs %}
+	{{ block.super }}
+	{% breadcrumb "Projects" "projects" %}
+	{% breadcrumb "List of events" "project-events" project_pk %}
+	{% breadcrumb "Update event" "event-update" %}
+{% endblock %}
+
+<!-- set the messages -->
+{% block messages %}  
+	<div id="id_messages_remove"></div>
+{% endblock messages %}
+
+<!-- Main content-->
+{% block content %}
+	<!-- The add Modal -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content"></div>
+		</div>
+	</div>
+	
+	{% if is_super_user and is_active %}
+
+		<legend class="rounded-group-box">Update an Event</legend>
+		
+		<!--  Files table goes here-->
+		<br>
+		
+		{% crispy form %}
+		
+<!-- 		<hr>
+		{% if table.page and show_paginatior %}
+			<div class="table-container">
+		{% endif %}
+	
+		{% block table %}
+		    <div class="table-responsive">
+		        <table class="table table-hover table-bordered table-striped"{% if table.attrs %} {{ table.attrs.as_html }}{% endif %}>
+		            {% block table.thead %}
+		            <thead>                 
+		              <tr>
+		                {% for column in table.columns %}
+		                    {% if column.orderable %}
+		                    	<th {{ column.attrs.th.as_html }}><a href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}">{{ column.header|title }}</a></th>
+		                    {% else %}
+		                    	<th {{ column.attrs.th.as_html }}>{{ column.header|title }}</th>
+		                    {% endif %}
+		                {% endfor %}
+		              </tr>
+		            </thead>
+		            {% endblock table.thead %}
+		            {% block table.tbody %}
+		            <tbody>
+		                {% for row in table.page.object_list|default:table.rows %} {# support pagination #}
+		                  {% block table.tbody.row %}
+		                  <tr id="row_{{ row.record.id }}" class="{% cycle "odd" "even" %}">
+		                      {% for column, cell in row.items %}
+		                          <td {{ column.attrs.td.as_html }}>{{ cell }}</td>
+		                      {% endfor %}
+		                  </tr>
+		                  {% endblock table.tbody.row %}
+		                {% empty %}
+		                  {% if table.empty_text %}
+		                  {% block table.tbody.empty_text %}
+		                  	<tr><td colspan="{{ table.columns|length }}">{{ table.empty_text }}</td></tr>
+		                  {% endblock table.tbody.empty_text %}
+		                  {% endif %}
+		                {% endfor %}
+		            </tbody>
+		            {% endblock table.tbody %}
+		            {% block table.tfoot %}
+		            	<tfoot></tfoot>
+		            {% endblock table.tfoot %}
+		        </table>
+		    </div>
+		{% endblock table %}
+		
+		{% if table.page and show_paginatior %}
+			{% block pagination %}
+			    {% bootstrap_pagination table.page url=request.get_full_path %}
+			{% endblock pagination %}
+			</div>
+		{% endif %}
+		
+		<hr> -->
+
+	{% else %}
+		 <div id="id_messages_remove"></div>
+		 <div class="alert alert-danger ">Your credentials don't allow you to access this page.</div>
+	{% endif %}
+	
+	
+	<!-- The remove Modal Files -->
+	<div class="modal fade" id="id_remove_file_modal" >
+		<div class="modal-dialog">
+			<div class="modal-content">
+   
+  					<!-- Modal Header -->
+  					<div class="modal-header">
+    					<h4 class="modal-title-remove">Remove a file</h4>
+    					<button type="button" class="close" data-dismiss="modal">&times;</button>
+  					</div>
+  
+  					<!-- Modal body -->
+  					<div class="modal-body mx-auto mw-100">
+  						<div id="id-modal-body-remove-file" remove-single-value-url="{% url 'remove-file' %}">
+  							<label id="id-label-remove" class="col-form-label">Folder Name</label>
+   						</div>
+  					</div>
+  					<!-- Modal footer -->
+  					<div class="modal-footer" id="id-modal-footer-remove">
+    					<button type="button" class="btn btn-secondary" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    					<button id="id-remove-button" type="button" class="btn btn-primary btn-danger" data-dismiss="modal">Remove</button>
+  					</div>
+			</div>
+ 		</div>
+	</div>
+	
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript"> 
+		var edit_remove_events_type_js = ("{{edit_remove_events_type}}" == "True");
+	</script>
+
+	{% load static%}
+		<script type="text/javascript" src="{% static 'js/jquery.bootstrap.modal.forms_changed.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/events/event-add.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/file/remove-files.js' %}"></script>
+{% endblock %}
+

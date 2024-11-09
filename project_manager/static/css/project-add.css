@@ -1,0 +1,9 @@
+
+.padding-button-add-remove {
+	padding-right:8px;
+}
+
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+}

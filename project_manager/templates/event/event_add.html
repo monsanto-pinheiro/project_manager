@@ -1,0 +1,54 @@
+{% extends '_layouts/base.html' %}
+
+{% load crispy_forms_tags %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block css %}
+	{% load static %}
+		<link rel="stylesheet" href="{% static 'css/error_add_html.css' %}" type="text/css" />
+		<link rel="stylesheet" href="{% static 'css/event-add.css' %}" type="text/css" />
+{% endblock css %}
+
+<!-- Breadcrumbs-->
+{% block breadcrumbs %}
+	{{ block.super }}
+	{% breadcrumb "Projects" "projects" %}
+	{% breadcrumb "List of events" "project-events" project_pk %}
+	{% breadcrumb "Add event" "event-add" %}
+{% endblock %}
+
+<!-- set the messages -->
+{% block messages %}  
+	<div id="id_messages_remove"></div>
+{% endblock messages %}
+		
+<!-- Main content-->
+{% block content %}
+	<!-- The add Modal -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content"></div>
+		</div>
+	</div>
+	
+	{% if is_super_user and is_active %}
+		
+		{% crispy form %}
+		
+	{% else %}
+		 <div id="id_messages_remove"></div>
+		 <div class="alert alert-danger ">Your credentials don't allow you to access this page.</div>
+	{% endif %}
+	
+{% endblock content %}
+
+{% block js %}
+ 	 <script type="text/javascript"> 
+		var edit_remove_events_type_js = ("{{edit_remove_events_type}}" == "True");
+	</script>
+
+	{% load static %}
+		<script type="text/javascript" src="{% static 'js/jquery.bootstrap.modal.forms_changed.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/events/event-add.js' %}"></script>
+{% endblock js %}
+

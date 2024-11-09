@@ -1,0 +1,87 @@
+{% extends '_layouts/base.html' %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block css %}
+	{% load static %}
+		<link rel="stylesheet" href="{% static 'css/error_add_html.css' %}" type="text/css" />
+{% endblock css %}
+
+<!-- Breadcrumbs-->
+{% block breadcrumbs %}
+	{{ block.super }}
+	{% breadcrumb "Settings" "settings" %}
+{% endblock %}
+
+<!-- set the messages -->
+{% block messages %}  
+	<div id="id_messages_remove"></div>
+{% endblock messages %}
+
+<!-- Main content-->
+{% block content %}
+	<!-- The add Modal -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content"></div>
+		</div>
+	</div>
+	
+	{% if is_super_user and is_active %}
+	
+		<nav class="navbar navbar-expand-md navbar-light p-0 justify-content-end justify-content-md-center">
+			<!-- Buttons to several settings Research/Institution/Even-type/Project-type -->
+			<ul class="d-none d-md-flex navbar-nav mx-auto text-size-buttons">
+				<a class="nav-item nav-link {% if nav_settings_research %} active {% endif %} ml-4 ml-lg-5" href="{% url 'settings-research' %}">Reseach</a>
+				<a class="nav-item nav-link {% if nav_settings_institute %} active {% endif %} ml-4 ml-lg-5" href="{% url 'settings-institute' %}">Institute</a>
+				<a class="nav-item nav-link {% if nav_settings_specie %} active {% endif %} ml-4 ml-lg-5" href="{% url 'settings-specie' %}">Specie</a>
+				<a class="nav-item nav-link {% if nav_settings_project_type %} active {% endif %} ml-4 ml-lg-5" href="{% url 'settings-project-type' %}">Project type</a>
+				<a class="nav-item nav-link {% if nav_settings_event_type %} active {% endif %} ml-4 ml-lg-5" href="{% url 'settings-event-type' %}">Event type</a>
+				<a class="nav-item nav-link {% if nav_settings_equipments %} active {% endif %} ml-4 ml-lg-5" href="{% url 'settings-equipment' %}">Equipment</a>
+			</ul>
+		</nav>
+		
+		<!-- extra content -->		
+		{% block content-settings %}{% endblock content-settings %}
+	
+	{% else %}
+		 <div id="id_messages_remove"></div>
+		 <div class="alert alert-danger ">Your credentials don't allow you to access this page.</div>
+	{% endif %}
+	
+	<!-- The remove Modal Files -->
+	<div class="modal fade" id="id_remove_settings_modal" >
+		<div class="modal-dialog">
+			<div class="modal-content">
+   
+  					<!-- Modal Header -->
+  					<div class="modal-header">
+    					<h4 id="id-label-header-remove" class="modal-title-remove">Set a name</h4>
+    					<button type="button" class="close" data-dismiss="modal">&times;</button>
+  					</div>
+  
+  					<!-- Modal body -->
+  					<div class="modal-body mx-auto mw-100">
+  						<div id="id-modal-body-remove-settings" remove-single-value-url="/projects/ajax/remove_settings">
+  							<label id="id-label-remove" class="col-form-label">Folder Name</label>
+   						</div>
+  					</div>
+  					<!-- Modal footer -->
+  					<div class="modal-footer" id="id-modal-footer-remove">
+    					<button type="button" class="btn btn-secondary" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    					<button id="id-remove-button" type="button" class="btn btn-primary btn-danger" data-dismiss="modal">Remove</button>
+  					</div>
+			</div>
+ 		</div>
+	</div>
+	
+{% endblock content %}
+
+{% block js %}
+
+	{% load static%}
+		<script type="text/javascript" src="{% static 'js/settings/remove-settings.js' %}"></script>
+		
+	{% block js_second_level %}{% endblock js_second_level %}
+{% endblock js %}
+

@@ -1,0 +1,66 @@
+<form method="post" action="">
+  {% csrf_token %}
+
+ <div class="modal-header">
+    <h5 class="modal-title">Add person to an event</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+	<div class="modal-body">
+    	{% for field in form %}
+    		<div class="form-group{% if field.errors %} invalid{% endif %}">
+	    		<div class="row">
+					<div class="col-sm-4">
+						<label for="{{ field.id_for_label }}">{{ field.label }} {% if field.field.required %} <span class="asteriskField">*</span> {% endif %} </label>
+					</div>
+					
+					{% if field.label == "Person" %}
+						<div class="col-sm-8">
+							<select name="person" class="select form-control" id="id_person">
+								{% for person in form.person.field.choices.queryset.all %}
+									<option value="{{person.id}}">{{person.username}}</option>
+								{% endfor %}
+							</select>
+						</div>
+					{% elif field.label == "Description" %}
+						<div class="col-sm-8">
+							<textarea name="{{ field.html_name }}"
+								rows="6" maxlength="{{field.field.max_length}}"
+								class="textarea form-control" {% if field.errors %} style="border: 2px solid red" {% endif %}"
+								id="{{ field.id_for_label }}" {% if field.field.required %} required {% endif %}
+							>{% if field.value %}{{field.value}}{% endif %}</textarea>
+						</div>
+					{% else %}
+						<div class="col-sm-8">
+							<input type="text" name="{{ field.html_name }}" 
+								value="{% if field.value %}{{field.value}}{% endif %}" maxlength="{{ field.field.max_length }}" 
+								class="textinput textInput form-control" {% if field.errors %} style="border: 2px solid red" {% endif %}" 
+								id="{{ field.id_for_label }}"
+								{% if field.field.required %} required {% endif %}
+							>
+						</div>
+					{% endif %}
+				</div>
+				
+				{% if field.errors %}
+					{% for error in field.errors %}
+						<div class="row"> 
+							<div class="col-sm-12 ">
+								 <p class="alert alert-danger help-block" style="margin-top: 0.2rem; padding: .3rem .35rem">{{ error }}</p>
+							</div>
+						</div>
+					{% endfor %}
+				{% endif %} 
+			</div>
+	    {% endfor %}
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <button type="button" class="submit-btn btn btn-primary">Create</button>
+  </div>
+
+</form>
+

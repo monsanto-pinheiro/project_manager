@@ -1,0 +1,35 @@
+{% extends '_layouts/base.html' %}
+
+{% load static %}
+{% block css %}
+
+{% endblock css %}
+
+{% block header %}
+	<div class="page-header rounded-header">
+    	<h2>Project manager of iBiMED sequencing facility.</h2>
+	</div>
+{% endblock header %}
+
+
+{% block content %}
+	<div class="container">
+		<p> </p>
+     	<p class="project-description">This website allows you to register and track all the projects running in the sequencing/bioinformatics 
+     		facilities in iBiMED. You need to have valid credentials to log in. There are two types of credentials: i) Superuser - 
+     		allows you to create and consult the information; ii) Staff - only allows you to consult the information. All logins 
+     		are traceable so that all the information will be tracked.</p>
+     	<p class="project-description">All personal data is encrypted in the database.</p>
+     	<p class="project-description">The base model of this website is an association of events to its projects. For each project 
+     		created, you can add successive events, like ‘samples in preparation’, ‘sequencing’, ‘bioinformatics analysis’, 
+     		‘report delivery’, etc. You can also add files to each event to support your actions.</p>
+		
+		<p> </p>
+		<div class="row">
+			<img src="{% static 'images/ibimed_UA_logo.jpg' %}" style="width:360px; margin:10px; padding-right:20px; padding-top:15px" id='rep_ua_logo_id'>
+			<img src="{% static 'images/Republica_Portuguesa_logo.svg' %}" style="width:175px; margin:10px; padding-right:20px; padding-top:15px" id='rep_portuguese_logo_id'>
+			<img src="{% static 'images/FCT.jpg' %}" style="width:530px; padding-top:15px" id='fct_logo_id'>
+		</div>
+	</div>
+	
+{% endblock content %}

@@ -1,0 +1,77 @@
+## to remove previous migrations
+$ cd /home/mmp/git/project_manager/project_manager
+$ find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+$ find . -path "*/migrations/*.pyc"  -delete
+
+## to activate django 3.0
+$ . /home/software/django3.0/bin/activate
+
+## in fresh instalations need to:
+1) COPY static/js/jquery.bootstrap.modal.forms
+2) comment unique limitation in 
+		django3.0/lib/python3.6/site-packages/encrypted_fields/fields.py
+		line 47
+A copy of file 'fields.py' is inside of encrypted_fields folder.
+## END in fresh installations need to:
+
+$ python3 manage.py makemigrations
+$ python3 manage.py migrate
+$ python3 manage.py load_default_files
+$ python3 manage.py loaddata projects
+$ python3 manage.py createsuperuser
+
+### replicate the code
+$ ssh -L 5430:127.0.0.1:5432 monsanto@192.168.248.164
+$ ibigen-projects-mmp.sh
+$ cd /usr/local/website/project-manager-website-mmp
+$ sudo su projman
+$ git pull
+$ sudo systemctl restart apache2
+
+
+### web site name
+$ ssh -L 5430:127.0.0.1:5432 monsanto@192.168.248.164
+$ ibigenprojects.web.ua.pt
+
+### error
+/usr/local/lib/python3.6/dist-packages/django/db/models/fields/__init__.py:1368: RuntimeWarning: DateTimeField Specie.creation_date received a naive datetime (2020-03-25 10:54:30.027554) while time zone support is active.
+  RuntimeWarning)
+
+  
+#### web server  
+https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-18-04
+<VirtualHost *:80>
+        ServerName insaflu.insa.pt
+        Redirect "/" "https://insaflu.insa.pt/i"
+</VirtualHost>
+
+
+Listen 443 https
+
+<VirtualHost *:443>
+ServerName insaflu-insa.min-saude.pt:443
+
+SSLEngine on
+SSLCertificateFile /opt/tomcat/apache-tomcat-9.0.20/keys/2020/biobank_web_ua_pt_20207416/biobank_web_ua_pt.crt
+SSLCertificateKeyFile /opt/tomcat/apache-tomcat-9.0.20/keys/biobank_2020.key
+SSLCACertificateFile /opt/tomcat/apache-tomcat-9.0.20/keys/2020/biobank_web_ua_pt_20207416/DigiCertCA.crt
+
+        ProxyPass /dist http://nx.local:4000/dist
+        ProxyPassReverse /dist http://nx.local:4000/dist
+
+        ProxyPass /ncov http://nx.local:4000/ncov
+        ProxyPassReverse /ncov http://nx.local:4000/ncov
+
+        ProxyPass /charon http://nx.local:4000/charon
+        ProxyPassReverse /charon http://nx.local:4000/charon
+
+
+CustomLog /var/log/httpd/insaflu_custom_minsaude.log "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+</VirtualHost>
+
+##############################################################
+#############################################################
+
+Versão 0.3.0 (21-07-2020)
+1) Correção de dois bugs detetados pela Patricia (update projects; change project type);
+2) Adicionado a opção de equipamento;

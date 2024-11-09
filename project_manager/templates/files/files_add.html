@@ -1,0 +1,109 @@
+{% extends '_layouts/base.html' %}
+
+{% load crispy_forms_tags %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block css %}
+	{% load static %}
+		<link rel="stylesheet" href="{% static 'css/file-add.css' %}" type="text/css" />
+{% endblock css %}
+
+{% block breadcrumbs %}
+	{{ block.super }}
+	{% breadcrumb "Projects" "projects" %}
+	{% breadcrumb "List of events" "project-events" project.pk %}
+	{% breadcrumb "View event" "event-view" event.pk "tab_files" %}
+	{% breadcrumb "Upload files" "files-add" %}
+{% endblock %}
+
+{% block content %}
+
+	<legend class="rounded-group-box">{{header_message}}</legend>
+	<div class="container-fluid text-size-info">
+		<hr>
+		<div class="row">
+			<div class="col-lg-4"><strong>Event type:</strong> {{ event.event_type.name}}</div>
+			<div class="col-lg-4"><strong>Created:</strong> {{ event.creation_date|date}}</div>
+			<div class="col-lg-4"><strong>CreatedBy:</strong> {{ event.owner.username}}</div> 
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-lg-4"><strong>Proj.Ref.:</strong> {{ project.reference}}</div>
+		  	<div class="col-lg-4"><strong>Research:</strong> {{ project.research.name}}</div>
+		  	<div class="col-lg-4"><strong>Institute:</strong> {{ project.institute.abbreviation}}</div>
+		</div>
+		<hr>
+	</div>
+	
+	{% if is_super_user and is_active %}
+		<!-- Start drop files -->
+		<br>
+	    <div class="well text-muted text-center" style="padding-top: 2rem; padding-bottom: 2rem;">
+		  	<span class="fa fa-arrow-down" style="font-size: 3rem;"></span>
+	 			<h3>Drop files here...</h3>
+		</div>
+		
+		<a href="#" data-title="Open a multi-select dialog to upload files" class="btn btn-small btn-primary dark js-upload-files">
+			<span><i class="fa fa-upload"></i> Or upload files from here</span></a>
+	
+		<p> </p>
+		{{ message_note }}
+		<p> </p>
+		
+		{# 2. FILE INPUT TO BE USED BY THE PLUG-IN #}
+		<input id="fileupload" type="file" name="path_name" multiple
+		       style="display: none;"
+		       data-url="{% url 'files-add' %}"
+		       data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+		
+		<p> </p>
+		{# 3. TABLE TO DISPLAY THE UPLOADED files #}
+		<table id="gallery" class="table table-bordered">
+		  <thead>
+		    <tr>
+		      <th>Files uploaded</th>
+		      <th>Status</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  </tbody>
+		</table>
+	
+		<!--  -->
+		<div class="modal fade" id="modal-progress" data-backdrop="static" data-keyboard="false">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h4 class="modal-title">Uploading...</h4>
+		      </div>
+		      <div class="modal-body">
+		        <div class="progress">
+		          <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	
+	{% else %}
+		 <div id="id_messages_remove"></div>
+		 <div class="alert alert-danger ">Your credentials don't allow you to access this page.</div>
+	{% endif %}
+	
+	<hr>
+	<a href="{% url 'event-view' event.pk 'tab_files' %}" class="btn btn-small btn-primary dark">
+		<span><i class="fa fa-arrow-left"></i> Go back</span></a>
+	<br>
+					
+{% endblock %}
+
+ {% block js %}
+ 	 {% load static %}
+ 	 	<script type="text/javascript" src="{% static 'js/jQuery_File_Upload/js/vendor/jquery.ui.widget.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/jQuery_File_Upload/js/jquery.iframe-transport.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/jQuery_File_Upload/js/jquery.fileupload.js' %}"></script>
+	 	
+	 	<!-- Custom scripts for all pages-->
+    	<script type="text/javascript" src="{% static 'js/file/upload-files.js' %}"></script>
+ {% endblock %}
+

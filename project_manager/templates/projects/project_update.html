@@ -1,0 +1,67 @@
+{% extends '_layouts/base.html' %}
+
+{% load django_bootstrap_breadcrumbs %}
+{% load crispy_forms_tags %}
+
+{% block css %}
+	{% load static %}
+		<link rel="stylesheet" href="{% static 'css/error_add_html.css' %}" type="text/css" />
+		<link rel="stylesheet" href="{% static 'css/project-add.css' %}" type="text/css" />
+{% endblock css %}
+
+{% block breadcrumbs %}
+	{{ block.super }}
+	{% breadcrumb "Projects" "projects" %}
+	{% breadcrumb "Update project" "project-update" %}
+{% endblock %}
+
+<!-- set the messages -->
+{% block messages %}  
+	<div id="id_messages_remove"></div>
+{% endblock messages %}
+
+{% block content %}
+	
+	<!-- The add Modal -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content"></div>
+		</div>
+	</div>
+	
+	{% if is_super_user and is_active %}
+		{% crispy form %}
+	{% else %}
+		 <div id="id_messages_remove"></div>
+		 <div class="alert alert-danger ">Your credentials don't allow you to access this page.</div>
+	{% endif %}
+	
+	 
+	
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript"> 
+		var edit_remove_projects_type_js = ("{{edit_remove_projects_type}}" == "True");
+		var possible_to_change_projects_type_js = ("{{possible_to_change_projects_type}}" == "True");
+		var edit_remove_research_js = ("{{edit_remove_research}}" == "True");
+		var edit_remove_specie_js = ("{{edit_remove_specie}}" == "True");
+		var edit_remove_institute_js = ("{{edit_remove_institute}}" == "True");
+		var source_pk_js = "{{source_pk}}";
+		
+		$().ready(function(){
+			/// update Create a project to Update project
+			document.getElementsByClassName("rounded-group-box")[0].textContent = "Update project";
+		});
+		
+	</script>
+
+	{% load static%}
+		<script type="text/javascript" src="{% static 'js/jquery.bootstrap.modal.forms_changed.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/projects/project-add.js' %}"></script>
+		
+    
+{% endblock %}
+
+
+

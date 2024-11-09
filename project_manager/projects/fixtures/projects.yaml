@@ -1,0 +1,200 @@
+##
+## model: projects.specie
+- fields:
+    name: Irrelevant
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 1
+  model: projects.specie
+- fields:
+      name: Homo sapiens
+      owner: 1
+      creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 2
+  model: projects.specie
+- fields:
+    name: Mus musculus
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 3
+  model: projects.specie
+- fields:
+    name: Rattus norvegicus
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 4
+  model: projects.specie
+- fields:
+    name: Candida Albicans
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 5
+  model: projects.specie
+- fields:
+    name: Saccharomyces cerevisiae
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 6
+  model: projects.specie
+  
+##
+## projects.eventtype
+- fields:
+    name: Other
+    description: Occurrence not relevante
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 1
+  model: projects.eventtype
+- fields:
+    name: Sequencing
+    description: Information about sequencing process
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 2
+  model: projects.eventtype
+- fields:
+    name: Report release
+    description: Information about report release
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 3
+  model: projects.eventtype
+- fields:
+    name: Pipeline analyses 
+    description: Information about pipeline analyses 
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 4
+  model: projects.eventtype
+- fields:
+    name: Quotation
+    description: Simple quotation
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 5
+  model: projects.eventtype
+- fields:
+    name: Sample Preparation
+    description: Preparation of samples in lab.
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 6
+  model: projects.eventtype
+- fields:
+    name: Waiting samples
+    description: Wating samples to start the process
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 7
+  model: projects.eventtype
+- fields:
+    name: Project description
+    description: Description of the project
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 8
+  model: projects.eventtype
+
+
+##
+## projects.projecttype
+- fields:
+    name: Irrelevant
+    abbreviation: Irrelevant
+    description: It is irrelevant
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  model: projects.projecttype
+  pk: 1
+- fields:
+    name: WGS
+    abbreviation: WGS
+    description: Whole genome sequence
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  model: projects.projecttype
+  pk: 2
+- fields:
+    name: GWAS
+    abbreviation: GWAS
+    description: Genone Wide Association Study
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 3
+  model: projects.projecttype
+- fields:
+    name: mRNAseq-NotStranded
+    abbreviation: mRNAseq
+    description: Generic mRNASeq not stranded
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 4
+  model: projects.projecttype
+- fields:
+    name: mRNAseq-Stranded
+    abbreviation: mRNAseq
+    description: Generic mRNASeq stranded
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 5
+  model: projects.projecttype
+- fields:
+    name: total RNAseq-NotStranded
+    abbreviation: tRNAseq
+    description: Total RNASeq not stranded
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 6
+  model: projects.projecttype
+- fields:
+    name: total RNAseq-Stranded
+    abbreviation: tRNAseq
+    description: Total RNASeq stranded
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  pk: 7
+  model: projects.projecttype
+- fields:
+    name: ChipSeq
+    abbreviation: ChipSeq
+    description: ChipSeq
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  model: projects.projecttype
+  pk: 8
+  
+#
+## Institute
+- fields:
+    name: iBiMED - Departamento de Ciências Médicas (DCM)
+    abbreviation: iBiMED
+    city: Aveiro
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  model: projects.institute
+  pk: 1
+  
+ #
+ ### researchs
+- fields:
+    name: Miguel Pinheiro
+    email: monsanto@ua.pt
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  model: projects.research
+  pk: 1
+- fields:
+    name: Gabriela Moura
+    email: gmoura@ua.pt
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  model: projects.research
+  pk: 2
+- fields:
+    name: Manuel Santos
+    email: msantos@ua.pt
+    owner: 1
+    creation_date: 2020-03-25 10:54:30.027554+00
+  model: projects.research
+  pk: 3

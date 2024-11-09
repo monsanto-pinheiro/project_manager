@@ -1,0 +1,22 @@
+{% extends '_layouts/base.html' %}
+
+{% block header %}
+	<div class="page-header rounded-header">
+    	<h2>Login, please.</h2>
+	</div>
+{% endblock header %}
+
+{% block content %}
+	
+	{% load crispy_forms_tags %}
+		<form class="form-horizontal" action="{% url 'login' %}" method="post">
+		    {% crispy form %}
+		</form>
+		<p></p>
+	
+{% endblock content %}
+
+
+{% block js %}
+
+{% endblock js %}

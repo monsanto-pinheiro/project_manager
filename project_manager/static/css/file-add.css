@@ -1,0 +1,13 @@
+
+.padding-accept-file {
+	padding-right:8px;
+	color:green;
+}
+.padding-not-accept-file {
+	padding-right:8px;
+	color:red;
+}
+
+.padding-download-file {
+	padding-right:8px;
+}

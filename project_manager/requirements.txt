@@ -1,0 +1,18 @@
+django==3.0.4
+django-bootstrap-breadcrumbs
+django-tables2==2.3.1
+django-bootstrap4
+django-ipware
+django-braces
+django-crispy_forms==1.9.0
+django-user-agents
+django-bootstrap-modal-forms
+django-searchable-encrypted-fields
+#libldap2-dev libsasl2-dev ldap-utils libpq-dev
+# for apache libapache2-mod-wsgi-py3
+# sudo a2enmod proxy
+# sudo a2enmod proxy_http
+django-auth-ldap
+python-decouple
+psycopg2
+pyyaml

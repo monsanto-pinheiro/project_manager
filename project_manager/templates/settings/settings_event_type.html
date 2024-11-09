@@ -1,0 +1,99 @@
+{% extends 'settings/settings_base.html' %}
+
+{% load bootstrap4 %}
+{% load querystring from django_tables2 %}
+
+<!-- Main settings content-->
+{% block content-settings %}
+			
+	{% if table.page and show_paginatior %}
+		<div class="table-container">
+	{% endif %}
+
+	{% block table %}
+	    <div class="table-responsive">
+	        <table class="table table-hover table-bordered table-striped"{% if table.attrs %} {{ table.attrs.as_html }}{% endif %}>
+	            {% block table.thead %}
+	            <thead>
+	            
+	              <tr>
+	                    <th colspan="8">
+	                    	<a href="javascript:;" data-title="Add new event type" class="btn btn-small btn-primary dark" id="id_event_type_add_modal" data-reverse="settings-event-type">
+	                    		<span><i class="fa fa-plus-square"></i> Add Event type</span></a>
+	                        <form method="get" class="form-inline form-search pull-right">
+	           		            {% csrf_token %}
+	                            <input id="search_form_id" name="search_event_type" type="text" class="form-control col-md-8" placeholder="Name, descri., creat.by"{% if search_event_type %} value="{{ search_event_type }}"{% endif %}>
+	                            <button type="submit" class="btn btn-small btn-dark"><i class="fa fa-search"></i> Search</button>
+	                        </form>
+	                    </th>                  
+	              </tr>
+	                                 
+	              <tr>
+	                {% for column in table.columns %}
+	                    {% if column.orderable %}
+	                    	<th {{ column.attrs.th.as_html }}><a href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}">{{ column.header|title }}</a></th>
+	                    {% else %}
+	                    	<th {{ column.attrs.th.as_html }}>{{ column.header|title }}</th>
+	                    {% endif %}
+	                {% endfor %}
+	              </tr>
+	            </thead>
+	            {% endblock table.thead %}
+	            {% block table.tbody %}
+	            <tbody>
+	                {% for row in table.page.object_list|default:table.rows %} {# support pagination #}
+	                  {% block table.tbody.row %}
+	                  <tr id="row_{{ row.record.id }}" class="{% cycle "odd" "even" %}">
+	                      {% for column, cell in row.items %}
+	                          <td {{ column.attrs.td.as_html }}>{{ cell }}</td>
+	                      {% endfor %}
+	                  </tr>
+	                  {% endblock table.tbody.row %}
+	                {% empty %}
+	                  {% if table.empty_text %}
+	                  {% block table.tbody.empty_text %}
+	                  	<tr><td colspan="{{ table.columns|length }}">{{ table.empty_text }}</td></tr>
+	                  {% endblock table.tbody.empty_text %}
+	                  {% endif %}
+	                {% endfor %}
+	            </tbody>
+	            {% endblock table.tbody %}
+	            {% block table.tfoot %}
+	            	<tfoot></tfoot>
+	            {% endblock table.tfoot %}
+	        </table>
+	    </div>
+	{% endblock table %}
+	
+	{% if table.page and show_paginatior %}
+		{% block pagination %}
+		    {% bootstrap_pagination table.page url=request.get_full_path %}
+		{% endblock pagination %}
+		</div>
+	{% endif %}
+			
+	
+{% endblock content-settings %}
+
+{% block js_second_level %}
+	<script type="text/javascript">
+		$(function () {
+			$("#id_event_type_add_modal").modalForm({
+					formURL: "/projects/create_event_type/",
+					reverse: $("#id_event_type_add_modal").data('reverse')
+				});
+
+			$(".update-event_type").each(function () {
+				$(this).modalForm({
+					formURL: $(this).data('id'),
+					reverse: $(this).data('reverse')
+				});
+			});
+	 	});
+	</script>
+	
+	{% load static%}
+		<script type="text/javascript" src="{% static 'js/jquery.bootstrap.modal.forms_changed.js' %}"></script>
+		
+ {% endblock js_second_level %}
+
